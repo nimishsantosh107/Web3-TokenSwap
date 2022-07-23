@@ -1,0 +1,165 @@
+a:link,
+a:visited,
+a:hover,
+a:active {
+    text-decoration: none;
+}
+
+.header {
+    width: 100vw;
+    height: 64px;
+    left: 0px;
+    top: 0px;
+
+    background: rgba(127, 95, 193, 0.28);
+    box-shadow: 0px 12px 63px rgba(36, 36, 36, 0.25);
+
+    display: flex;
+    align-items: center;
+}
+
+/* LOGO SECTION  */
+.header__spacer--1 {
+    height: 20px;
+    flex: 340px 0 1;
+}
+
+.header__logo {
+    font-family: "Outfit";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 45px;
+
+    color: #ffffff;
+
+    cursor: pointer;
+}
+
+.header__spacer--2 {
+    height: 20px;
+    flex: 140px 0 1;
+}
+
+/* NAV SECTION  */
+.header__nav {
+    display: flex;
+    align-items: center;
+}
+
+.header__nav a {
+    margin: 0 0 0 25px;
+    padding: 4px 15px;
+
+    font-family: "Outfit";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 30px;
+    text-align: center;
+
+    color: #ffffff;
+
+    cursor: pointer;
+}
+
+.header__nav .header__navitem--active {
+    border: 2px solid rgba(255, 255, 255, 0.75);
+    border-radius: 20px;
+}
+
+.header__spacer--3 {
+    height: 20px;
+    flex: 400px 0 1;
+}
+
+/* WALLET STATUS SECTION  */
+.header__walletstatus {
+    width: auto;
+    margin-left: auto;
+
+    background: #7f5fc1;
+    border-radius: 26px;
+}
+
+/* WALLET INACTIVE */
+.header__walletstatus--inactive {
+    padding: 11px 20px;
+
+    transition: 0.2s;
+
+    cursor: pointer;
+}
+
+.header__walletstatus--inactive span {
+    border: none;
+    outline: none;
+    background-color: transparent;
+
+    font-family: "Outfit";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 20px;
+    text-align: center;
+    white-space: nowrap;
+
+    color: #ffffff;
+}
+
+.header__walletstatus--inactive:hover {
+    background: #6e51a7;
+}
+
+/* WALLET ACTIVE */
+.header__walletstatus--active {
+    padding: 5px 5px;
+
+    display: flex;
+    align-items: center;
+}
+
+.header__walletstatus--active .header__network {
+    padding: 8px 14px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 20px;
+
+    display: flex;
+    align-items: center;
+}
+
+.header__walletstatus--active .header__network .header__statuscolor {
+    width: 10px;
+    height: 10px;
+
+    margin-right: 10px;
+
+    background: rgba(0, 255, 25, 0.57);
+    border-radius: 20px;
+}
+
+.header__walletstatus--active .header__network span {
+    font-family: "Outfit";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 16px;
+    text-align: center;
+
+    color: rgba(0, 0, 0, 0.91);
+}
+
+.header__walletstatus--active .header__iconcontainer {
+    height: 32px;
+    width: 32px;
+
+    margin-left: 5px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
