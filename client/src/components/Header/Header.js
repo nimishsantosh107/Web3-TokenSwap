@@ -1,19 +1,24 @@
 import "./Header.css";
 import React, { useState } from "react";
+
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+
 import BlockieIdenticon from "./BlockieIdenticon";
+import { connectWallet } from "../../actions";
 
 const Header = (props) => {
     const [walletConnected, setWalletConnected] = useState(false);
 
     const handleConnectWallet = (e) => {
-        props.handleConnectWallet();
-        setWalletConnected(true);
+        props.connectWallet();
+        setWalletConnected(true); // does it re-render if same as prev value?, handle failure case
     };
 
     const getNavbarJSX = () => {
         const nameURLList = [
             { name: "Swap", url: "/" },
-            { name: "Liquidity", url: "/page2" },
+            { name: "Liquidity", url: "/liquidity" },
         ];
 
         return (
@@ -21,15 +26,19 @@ const Header = (props) => {
                 {nameURLList.map((item) => {
                     if (window.location.pathname === item.url) {
                         return (
-                            <a key={item.url} href={item.url} className="header__navitem--active">
+                            <Link
+                                key={item.url}
+                                to={item.url}
+                                className="header__navitem header__navitem--active"
+                            >
                                 {item.name}
-                            </a>
+                            </Link>
                         );
                     } else {
                         return (
-                            <a key={item.url} href={item.url}>
+                            <Link key={item.url} to={item.url} className="header__navitem">
                                 {item.name}
-                            </a>
+                            </Link>
                         );
                     }
                 })}
@@ -53,12 +62,12 @@ const Header = (props) => {
                 <div className="header__walletstatus header__walletstatus--active">
                     <div className="header__network">
                         <div className="header__statuscolor"></div>
-                        <span>Rinkeby</span>
+                        <span>{props.network}</span>
                     </div>
                     <div className="header__iconcontainer">
                         <BlockieIdenticon
                             id="blockies"
-                            address={props.accountAddress}
+                            address={props.account}
                             diameter={26}
                             borderRadius="50%"
                         />
@@ -72,9 +81,9 @@ const Header = (props) => {
         <header className="header">
             {/* LOGO */}
             <div className="header__spacer--1"></div>
-            <a href="/" className="header__logo">
+            <Link to="/" className="header__logo">
                 Soap
-            </a>
+            </Link>
             <div className="header__spacer--2"></div>
             {/* NAV */}
             {getNavbarJSX()}
@@ -87,4 +96,11 @@ const Header = (props) => {
     );
 };
 
-export default Header;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        account: state.account,
+        network: state.network,
+    };
+};
+
+export default connect(mapStateToProps, { connectWallet })(Header);

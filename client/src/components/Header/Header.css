@@ -47,7 +47,7 @@ a:active {
     align-items: center;
 }
 
-.header__nav a {
+.header__nav .header__navitem {
     margin: 0 0 0 25px;
     padding: 4px 15px;
 
