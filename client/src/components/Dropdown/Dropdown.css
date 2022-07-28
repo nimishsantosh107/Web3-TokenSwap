@@ -1,0 +1,75 @@
+.dropdown {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: relative;
+}
+
+.dropdown__header {
+    border: none;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0);
+
+    padding: 6px 15px;
+
+    color: white;
+    font-family: "Outfit", Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 45px;
+    text-align: center;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown__header-title {
+    margin-right: 10px;
+}
+
+.dropdown__list {
+    border-radius: 8px;
+    background-color: rgb(224, 224, 224);
+
+    position: absolute;
+    left: -32%;
+    top: 70%;
+    width: 60%;
+    z-index: 1;
+
+    margin: 8px;
+    padding: 6px 25px;
+}
+
+.dropdown__item-container {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown__item {
+    border: none;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0);
+
+    margin: 8px;
+
+    color: black;
+    font-family: "Outfit", Roboto;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 16px;
+    text-align: center;
+}
+
+.dropdown__hr {
+    width: calc(100% + 26px);
+
+    border-color: rgba(0, 0, 0, 0.108);
+}

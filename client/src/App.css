@@ -3,3 +3,10 @@
     height: 100vh;
     background: linear-gradient(107.56deg, #241a54 0%, #511449 100%);
 }
+
+.content {
+    display: flex;
+    justify-content: center;
+
+    padding: 100px;
+}

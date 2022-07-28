@@ -1,0 +1,59 @@
+.availliq {
+    margin-left: 30px;
+    padding: 15px 30px;
+
+    background: rgba(217, 217, 217, 0.2);
+    border-radius: 30px;
+
+    box-shadow: -6px 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.availliq__title {
+    font-family: "Outfit";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 26px;
+
+    color: rgba(255, 255, 255, 0.79);
+}
+
+.availliq__container {
+    margin: 16px 0px;
+}
+
+.availliq__item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.availiq__inner_item-container {
+    width: 95%;
+
+    margin: 10px 0px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.availiq__innner_token {
+    font-family: "Outfit";
+    font-weight: 500;
+    font-size: 18px;
+
+    color: #ffffff;
+}
+
+.availiq__innner_value {
+    font-family: "Outfit";
+    font-weight: 200;
+    font-size: 18px;
+
+    color: #ffffff;
+}
+
+.availliq__hr {
+    width: calc(100% + 24px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}

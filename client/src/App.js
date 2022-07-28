@@ -5,24 +5,21 @@ import { connect } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import Header from "./components/Header/Header";
-import { handleAccountChange, handleChainChange } from "./actions";
+import Swap from "./containers/Swap/Swap";
+import LiquidityView from "./components/LiquidityView/LiquidityView";
 
 class App extends React.Component {
-    componentDidMount = async () => {
-        window.ethereum.on("accountsChanged", this.props.handleAccountChange);
-        window.ethereum.on("chainChanged", this.props.handleChainChange);
-    };
-
     render() {
         return (
             <BrowserRouter>
                 <div className="App">
                     <Header />
                     <div className="content">
-                        {/* <Switch>
-                            <Route path="/" component={} exact />
-                            <Route path="/liquidity" component={} />
-                        </Switch> */}
+                        <Switch>
+                            <Route path="/" component={Swap} exact />
+                            {/* <Route path="/liquidity" component={} /> */}
+                        </Switch>
+                        <LiquidityView list={["a", "b", "c"]} />
                     </div>
                 </div>
             </BrowserRouter>
@@ -30,4 +27,4 @@ class App extends React.Component {
     }
 }
 const mapStateToProps = (state, ownProps) => ({});
-export default connect(mapStateToProps, { handleAccountChange, handleChainChange })(App);
+export default connect(mapStateToProps, {})(App);

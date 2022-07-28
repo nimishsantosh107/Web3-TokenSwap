@@ -1,14 +1,20 @@
 import "./Header.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import BlockieIdenticon from "./BlockieIdenticon";
-import { connectWallet } from "../../actions";
+import { connectWallet, handleAccountChange, handleChainChange } from "../../actions";
 
 const Header = (props) => {
     const [walletConnected, setWalletConnected] = useState(false);
+    const windowLocation = useLocation();
+
+    useEffect(() => {
+        window.ethereum.on("accountsChanged", props.handleAccountChange);
+        window.ethereum.on("chainChanged", props.handleChainChange);
+    }, []);
 
     const handleConnectWallet = (e) => {
         props.connectWallet();
@@ -24,7 +30,7 @@ const Header = (props) => {
         return (
             <nav className="header__nav">
                 {nameURLList.map((item) => {
-                    if (window.location.pathname === item.url) {
+                    if (windowLocation.pathname === item.url) {
                         return (
                             <Link
                                 key={item.url}
@@ -103,4 +109,8 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-export default connect(mapStateToProps, { connectWallet })(Header);
+export default connect(mapStateToProps, {
+    connectWallet,
+    handleAccountChange,
+    handleChainChange,
+})(Header);

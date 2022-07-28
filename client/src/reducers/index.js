@@ -46,9 +46,29 @@ const networkReducer = (network = "...", action) => {
     }
 };
 
+const dropdownToken1Reducer = (token = "", action) => {
+    switch (action.type) {
+        case "SELECTED_TOKEN_1":
+            return action.payload.token;
+        default:
+            return token;
+    }
+};
+
+const dropdownToken2Reducer = (token = "", action) => {
+    switch (action.type) {
+        case "SELECTED_TOKEN_2":
+            return action.payload.token;
+        default:
+            return token;
+    }
+};
+
 export default combineReducers({
     web3: web3Reducer,
     account: accountReducer,
     balance: balanceReducer,
     network: networkReducer,
+    token1: dropdownToken1Reducer,
+    token2: dropdownToken2Reducer,
 });

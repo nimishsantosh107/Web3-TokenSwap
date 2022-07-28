@@ -52,3 +52,21 @@ export const handleChainChange = (chainID) => {
         });
     };
 };
+
+export const handleToken1Selected = (selectedToken) => {
+    return {
+        type: "SELECTED_TOKEN_1",
+        payload: {
+            token: selectedToken,
+        },
+    };
+};
+
+export const handleToken2Selected = (selectedToken) => {
+    return {
+        type: "SELECTED_TOKEN_2",
+        payload: {
+            token: selectedToken,
+        },
+    };
+};
