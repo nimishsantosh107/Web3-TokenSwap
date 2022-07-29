@@ -4,6 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
+import BGbubbles from "./components/BGBubbles/BGBubbles";
 import Header from "./components/Header/Header";
 import LiquidityView from "./components/LiquidityView/LiquidityView";
 
@@ -43,6 +44,7 @@ class App extends React.Component {
         return (
             <BrowserRouter>
                 <div className="App">
+                    <BGbubbles />
                     <Header />
                     {this.getPageContent()}
                 </div>

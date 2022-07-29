@@ -32,10 +32,11 @@
 
 .dropdown__list {
     border-radius: 8px;
-    background-color: rgb(224, 224, 224);
+    background-color: rgba(123, 123, 123, 0.838);
+    backdrop-filter: blur(5px);
 
     position: absolute;
-    left: -32%;
+    left: -30%;
     top: 70%;
     width: 60%;
     z-index: 1;
@@ -60,16 +61,15 @@
 
     margin: 8px;
 
-    color: black;
+    color: rgb(255, 255, 255);
     font-family: "Outfit", Roboto;
     font-style: normal;
-    font-weight: 200;
-    font-size: 16px;
+    font-weight: 300;
+    font-size: 18px;
     text-align: center;
 }
 
 .dropdown__hr {
     width: calc(100% + 26px);
-
-    border-color: rgba(0, 0, 0, 0.108);
+    border-color: rgba(218, 218, 218, 0.226);
 }
