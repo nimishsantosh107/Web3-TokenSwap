@@ -13,8 +13,8 @@ const SwapForm = (props) => {
                 <input className="swapform__text" type="number" placeholder="0.0" />
                 <Dropdown
                     className="swapform__dropdown"
-                    defaultTitle="ETH"
-                    list={["ETH", "LOL"]}
+                    defaultTitle="XXX"
+                    list={Object.keys(props.tokens)}
                     handleSelectedItem={props.handleToken1Selected}
                 />
             </div>
@@ -23,8 +23,8 @@ const SwapForm = (props) => {
                 <input className="swapform__text" type="number" placeholder="0.0" />
                 <Dropdown
                     className="swapform__dropdown"
-                    defaultTitle="BNB"
-                    list={["BNB", "LOL"]}
+                    defaultTitle="XXX"
+                    list={Object.keys(props.tokens)}
                     handleSelectedItem={props.handleToken2Selected}
                 />
             </div>
@@ -38,7 +38,9 @@ const SwapForm = (props) => {
     );
 };
 
-const mapStateToProps = (state, ownProps) => ({});
+const mapStateToProps = (state, ownProps) => ({
+    tokens: state.tokens,
+});
 export default connect(mapStateToProps, {
     handleToken1Selected,
     handleToken2Selected,

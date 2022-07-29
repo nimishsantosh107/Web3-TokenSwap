@@ -1,5 +1,7 @@
 .env
 
+**/client_*
+
 **/artifacts/
 **/build/
 **/node_modules/

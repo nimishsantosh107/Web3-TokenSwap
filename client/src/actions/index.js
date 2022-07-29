@@ -1,4 +1,6 @@
 import web3Helper from "../web3/helper";
+import { constants } from "./constants";
+import { initializeTokensAndContracts } from "../web3/contracts";
 
 export const connectWallet = () => {
     return async (dispatch, getState) => {
@@ -8,7 +10,7 @@ export const connectWallet = () => {
         const balance = await web3Helper.getBalance(web3, account);
 
         dispatch({
-            type: "CONNECT_WALLET",
+            type: constants.CONNECT_WALLET,
             payload: {
                 web3,
                 network,
@@ -26,7 +28,7 @@ export const handleAccountChange = (accounts) => {
         const balance = await web3Helper.getBalance(web3, account);
 
         dispatch({
-            type: "CHANGE_ACCOUNT",
+            type: constants.CHANGE_ACCOUNT,
             payload: {
                 account,
                 balance,
@@ -43,7 +45,7 @@ export const handleChainChange = (chainID) => {
         const balance = await web3Helper.getBalance(web3, account);
 
         dispatch({
-            type: "CHANGE_CHAIN",
+            type: constants.CHANGE_CHAIN,
             payload: {
                 network,
                 account,
@@ -53,9 +55,46 @@ export const handleChainChange = (chainID) => {
     };
 };
 
+export const initTokensAndContracts = () => {
+    return async (dispatch, getState) => {
+        const web3 = getState().web3;
+        const data = await initializeTokensAndContracts(web3);
+
+        dispatch({
+            type: constants.INIT_TOKENS_CONTRACTS,
+            payload: {
+                tokens: data.tokens,
+                contracts: data.contracts,
+            },
+        });
+    };
+};
+
+export const getLiquidityInformation = () => {
+    return async (dispatch, getState) => {
+        const { tokens, contracts } = getState();
+
+        let liquidityInfo = {};
+
+        for (let tokenSymbol of Object.keys(tokens)) {
+            let balance = await contracts.helperContract.methods
+                .getTokenBalance(contracts.swapContract._address, tokenSymbol)
+                .call();
+            liquidityInfo[tokenSymbol] = balance;
+        }
+
+        dispatch({
+            type: constants.UPDATE_LIQUIDITY_INFO,
+            payload: {
+                liquidity: liquidityInfo,
+            },
+        });
+    };
+};
+
 export const handleToken1Selected = (selectedToken) => {
     return {
-        type: "SELECTED_TOKEN_1",
+        type: constants.SELECTED_TOKEN_1,
         payload: {
             token: selectedToken,
         },
@@ -64,9 +103,13 @@ export const handleToken1Selected = (selectedToken) => {
 
 export const handleToken2Selected = (selectedToken) => {
     return {
-        type: "SELECTED_TOKEN_2",
+        type: constants.SELECTED_TOKEN_2,
         payload: {
             token: selectedToken,
         },
     };
+};
+
+export const updateSwapCounter = () => {
+    return { type: constants.SWAP_PERFORMED };
 };

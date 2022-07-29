@@ -4,7 +4,6 @@ const NERC233Factory = artifacts.require("NERC233Factory");
 module.exports = async function (deployer) {
     await deployer.deploy(NERC233Helper);
 
-    const accounts = await web3.eth.getAccounts();
     const factory = await NERC233Factory.deployed();
     const helper = await NERC233Helper.deployed();
 

@@ -1,12 +1,10 @@
-import web3 from "../web3/web3";
-
 import NERC233 from "../contracts/NERC233.json";
 import NERC233Swap from "../contracts/NERC233Swap.json";
 import NERC233Helper from "../contracts/NERC233Helper.json";
 import NERC233Factory from "../contracts/NERC233Factory.json";
 
-export const initializeContracts = async () => {
-    const NETWORK_ID = 4;
+export const initializeTokensAndContracts = async (web3) => {
+    const NETWORK_ID = 5777; // private
 
     let contracts = {};
     let tokens = {};
