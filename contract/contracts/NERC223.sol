@@ -33,7 +33,7 @@ contract NERC223Factory {
 
 // NERC223 Receiver Interface
 interface NERC223ContractReceiver is ERC223ContractReceiver {
-    function tokenAddressFallback( address from, uint value, address tokenAddress ) external;
+    function tokenAddressFallback( address from, uint value, address tokenAddress, bool swapCall ) external;
 }
 
 contract NERC223 is ERC223 {
@@ -42,7 +42,7 @@ contract NERC223 is ERC223 {
     // NERC223 Transfer to a contract or externally-owned account
     function transfer(address to, uint value) override public returns (bool success) {
         if (isContract(to)) {
-            return transferTokenToContract(msg.sender, to, value);
+            return _transferTokenToContract(msg.sender, to, value, false);
         }
         bytes memory empty;
         _transfer( msg.sender, to, value, empty );
@@ -55,7 +55,21 @@ contract NERC223 is ERC223 {
         allowances_[from][msg.sender] -= value;
 
         if (isContract(to)) {
-            return transferTokenToContract(from, to, value);
+            return _transferTokenToContract(from, to, value, false);
+        }
+        bytes memory empty;
+        _transfer( from, to, value, empty );
+        return true;
+    }
+
+    // NERC223 Transfer from address to a contract or externally-owned account 
+    // (with internal call flag which enables minting LP)
+    function _transferFrom(address from, address to, uint256 value, bool swapCall) public returns (bool success) {
+        require( value <= allowances_[from][msg.sender] );
+        allowances_[from][msg.sender] -= value;
+
+        if (isContract(to)) {
+            return _transferTokenToContract(from, to, value, swapCall);
         }
         bytes memory empty;
         _transfer( from, to, value, empty );
@@ -63,12 +77,12 @@ contract NERC223 is ERC223 {
     }
 
     // NERC223 Transfer to contract and invoke tokenAddressFallback() method
-    function transferTokenToContract(address from, address to, uint value) private returns (bool success) {
+    function _transferTokenToContract(address from, address to, uint value, bool swapCall) private returns (bool success) {
         bytes memory empty;
         _transfer( from, to, value, empty );
 
         NERC223ContractReceiver rx = NERC223ContractReceiver(to);
-        rx.tokenAddressFallback(from, value, address(this)); // token address
+        rx.tokenAddressFallback(from, value, address(this), swapCall); // token address
         return true;
     }
 
