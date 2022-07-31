@@ -6,10 +6,11 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import BGbubbles from "./components/BGBubbles/BGBubbles";
 import Header from "./components/Header/Header";
-import LiquidityView from "./components/LiquidityView/LiquidityView";
+import PreConnect from "./components/PreConnect/PreConnect";
 
-import Liquidity from "./containers/Liquidity/Liquidity";
 import Swap from "./containers/Swap/Swap";
+import Liquidity from "./containers/Liquidity/Liquidity";
+import Faucet from "./containers/Faucet/Faucet";
 
 import { initTokensAndContracts } from "./actions";
 
@@ -27,16 +28,16 @@ class App extends React.Component {
     getPageContent = () => {
         if (this.props.web3.eth) {
             return (
-                <div className="content">
+                <>
                     <Switch>
                         <Route path="/" component={Swap} exact />
                         <Route path="/liquidity" component={Liquidity} />
+                        <Route path="/faucet" component={Faucet} />
                     </Switch>
-                    <LiquidityView />
-                </div>
+                </>
             );
         } else {
-            return null;
+            return <PreConnect />;
         }
     };
 
@@ -46,7 +47,7 @@ class App extends React.Component {
                 <div className="App">
                     <BGbubbles />
                     <Header />
-                    {this.getPageContent()}
+                    <div className="content">{this.getPageContent()}</div>
                 </div>
             </BrowserRouter>
         );

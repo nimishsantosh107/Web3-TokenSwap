@@ -1,0 +1,78 @@
+.liqform {
+    width: fit-content;
+    height: auto;
+
+    padding: 30px;
+
+    background: rgba(217, 217, 217, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: -6px 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.liqform__text:focus {
+    outline-width: 0;
+}
+.liqform__text {
+    border: none;
+
+    height: 35px;
+    width: 200px;
+
+    margin: 20px 2px 20px 2px;
+    padding: 3px 20px;
+
+    color: white;
+    font-family: "Outfit", Roboto;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 20px;
+    text-align: right;
+
+    background: rgba(49, 26, 81, 0.67);
+    border-radius: 6px;
+}
+
+.liqform__button-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.liqform__button {
+    all: unset;
+    cursor: pointer;
+
+    padding: 6px 16px;
+
+    background-color: rgba(255, 255, 255, 0.49);
+    border-radius: 5px;
+
+    color: rgb(65, 0, 81);
+    font-family: "Outfit", Roboto;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 16px;
+    text-align: center;
+}
+
+.liqform__footer {
+    margin-top: 20px;
+
+    color: rgb(217, 217, 217);
+    font-family: "Outfit", Roboto;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 16px;
+    text-align: center;
+
+    display: flex;
+    justify-content: space-evenly;
+}

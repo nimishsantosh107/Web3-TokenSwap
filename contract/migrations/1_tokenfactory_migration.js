@@ -9,5 +9,5 @@ module.exports = async function (deployer) {
     const trx0 = await factory.createToken("Swap LP", "SLP");
     const trx1 = await factory.createToken("Token 1", "TK1");
     const trx2 = await factory.createToken("Token 2", "TK2");
-    const trx3 = await factory.createToken("Token 3", "TK2");
+    const trx3 = await factory.createToken("Token 3", "TK3");
 };

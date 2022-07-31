@@ -74,6 +74,17 @@ const liquidityInformationReducer = (liquidity = {}, action) => {
     }
 };
 
+const tokenPriceInformationReducer = (price = {}, action) => {
+    return {
+        SLP2TK1: 1,
+        SLP2TK2: 1,
+        SLP2TK3: 1,
+        TK12TK2: 1,
+        TK12TK3: 1,
+        TK22TK3: 1,
+    };
+};
+
 const dropdownToken1Reducer = (token = "", action) => {
     switch (action.type) {
         case constants.SELECTED_TOKEN_1:
@@ -92,12 +103,12 @@ const dropdownToken2Reducer = (token = "", action) => {
     }
 };
 
-const swapsCounterReducer = (swapsCounter = "", action) => {
+const liquidityUpdatesCounterReducer = (updatesCounter = "", action) => {
     switch (action.type) {
-        case constants.SWAP_PERFORMED:
-            return swapsCounter + 1;
+        case constants.LIQUIDITY_UPDATE_PERFORMED:
+            return updatesCounter + 1;
         default:
-            return swapsCounter;
+            return updatesCounter;
     }
 };
 
@@ -109,7 +120,8 @@ export default combineReducers({
     tokens: tokensReducer,
     contracts: contractsReducer,
     liquidity: liquidityInformationReducer,
+    price: tokenPriceInformationReducer,
     token1: dropdownToken1Reducer,
     token2: dropdownToken2Reducer,
-    swapsCounter: swapsCounterReducer,
+    updatesCounter: liquidityUpdatesCounterReducer,
 });

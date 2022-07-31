@@ -110,6 +110,6 @@ export const handleToken2Selected = (selectedToken) => {
     };
 };
 
-export const updateSwapCounter = () => {
-    return { type: constants.SWAP_PERFORMED };
+export const liquidityUpdateCounter = () => {
+    return { type: constants.LIQUIDITY_UPDATE_PERFORMED };
 };

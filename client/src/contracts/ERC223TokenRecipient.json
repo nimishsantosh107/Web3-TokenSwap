@@ -1,5 +1,5 @@
 {
-  "contractName": "ERC233ContractReceiver",
+  "contractName": "ERC223TokenRecipient",
   "abi": [
     {
       "inputs": [
@@ -19,13 +19,13 @@
           "type": "bytes"
         }
       ],
-      "name": "tokenFallback",
+      "name": "receiveApproval",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"tokenFallback\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/ERC233.sol\":\"ERC233ContractReceiver\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/ERC233.sol\":{\"keccak256\":\"0xd2699a9765dcda5cc048d18eae3023e692a7c3f571948e26283da0dd014bc564\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://7e600349471537867f848d5cc9b5ac776b8a568e9c40cfd768faf4a4c699b683\",\"dweb:/ipfs/QmSVNvPk5ARixxveBUXUtokh1putDgYRP6LKKcuJaQxxQ9\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"receiveApproval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/ERC223.sol\":\"ERC223TokenRecipient\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/ERC223.sol\":{\"keccak256\":\"0x167628506c40e0ef8d6f82654b66bab31791d714a3574ffba681cb58ef56adf8\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://0450ea146416c69004c8acaa0ae69ba40cbb3fedbfe9f7169634c34d7837d4b9\",\"dweb:/ipfs/QmVm1yFEtkaZLRyP7zj5ZStws7LC9qzrXoNKZPCAw7Z821\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -33,18 +33,18 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: UNLICENSED\r\n\r\npragma solidity ^0.8.13;\r\n\r\n// https://www.ethereum.org/token\r\ninterface ERC233TokenRecipient {\r\n    function receiveApproval( address from, uint256 value, bytes calldata data )\r\n    external;\r\n}\r\n\r\n// ERC223\r\ninterface ERC233ContractReceiver {\r\n    function tokenFallback( address from, uint value, bytes calldata data )\r\n    external;\r\n}\r\n\r\n// ERC223 token with added ERC20 and Ethereum-Token support\r\n//\r\n// Blend of multiple interfaces:\r\n// - https://theethereum.wiki/w/index.php/ERC20_Token_Standard\r\n// - https://www.ethereum.org/token (uncontrolled, non-standard)\r\n// - https://github.com/Dexaran/ERC23-tokens/\r\n\r\ncontract ERC223\r\n{\r\n    string  public name;\r\n    string  public symbol;\r\n    uint8   public decimals;\r\n    uint256 public totalSupply;\r\n\r\n    mapping( address => uint256 ) balances_;\r\n    mapping( address => mapping(address => uint256) ) allowances_;\r\n\r\n    // ERC20\r\n    event Approval( address indexed owner,\r\n                    address indexed spender,\r\n                    uint256 value );\r\n\r\n    event Transfer( address indexed from,\r\n                    address indexed to,\r\n                    uint256 value );\r\n\r\n    // Ethereum Token\r\n    event Burn( address indexed from, uint256 value );\r\n    event Mint( address indexed to, uint256 value );  \r\n\r\n    constructor(string memory tokenName, string memory tokenSymbol ) {\r\n        name = tokenName;\r\n        symbol = tokenSymbol;\r\n        decimals = 18;\r\n    }\r\n\r\n    receive() external payable { revert(\"does not accept eth\"); }\r\n    fallback() external payable { revert(\"calldata does not match a function\"); }\r\n\r\n    // ERC20\r\n    function balanceOf( address owner ) public view returns (uint) {\r\n        return balances_[owner];\r\n    }\r\n\r\n    // ERC20\r\n    //\r\n    // WARNING! When changing the approval amount, first set it back to zero\r\n    // AND wait until the transaction is mined. Only afterwards set the new\r\n    // amount. Otherwise you may be prone to a race condition attack.\r\n    // See: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\r\n    function approve( address spender, uint256 value ) public returns (bool success) {\r\n        allowances_[msg.sender][spender] = value;\r\n        emit Approval( msg.sender, spender, value );\r\n        return true;\r\n    }\r\n    \r\n    // recommended fix for known attack on any ERC20\r\n    function safeApprove( address _spender,\r\n                          uint256 _currentValue,\r\n                          uint256 _value ) public returns (bool success) {\r\n\r\n        // If current allowance for _spender is equal to _currentValue, then\r\n        // overwrite it with _value and return true, otherwise return false.\r\n\r\n        if (allowances_[msg.sender][_spender] == _currentValue)\r\n            return approve(_spender, _value);\r\n\r\n        return false;\r\n    }\r\n\r\n    // ERC20\r\n    function allowance( address owner, address spender ) public view returns (uint256 remaining) {\r\n        return allowances_[owner][spender];\r\n    }\r\n\r\n    // ERC20\r\n    function transfer( address to, uint256 value ) virtual public returns (bool success) {\r\n        bytes memory empty; // null\r\n        _transfer( msg.sender, to, value, empty );\r\n        return true;\r\n    }\r\n\r\n    // ERC20\r\n    function transferFrom( address from, address to, uint256 value ) virtual public returns (bool success) {\r\n        require( value <= allowances_[from][msg.sender] );\r\n\r\n        allowances_[from][msg.sender] -= value;\r\n        bytes memory empty;\r\n        _transfer( from, to, value, empty );\r\n\r\n        return true;\r\n    }\r\n\r\n    // Ethereum Token\r\n    function approveAndCall( address spender,\r\n                            uint256 value,\r\n                            bytes calldata context ) public returns (bool success) {\r\n        if ( approve(spender, value) )\r\n        {\r\n            ERC233TokenRecipient recip = ERC233TokenRecipient( spender );\r\n            recip.receiveApproval( msg.sender, value, context );\r\n            return true;\r\n        }\r\n        return false;\r\n    }        \r\n\r\n    // Ethereum Token\r\n    function mint( uint256 value ) public returns (bool success) {\r\n        balances_[msg.sender] += value;\r\n        totalSupply += value;\r\n\r\n        emit Mint( msg.sender, value );\r\n        return true;\r\n    }\r\n\r\n    // Ethereum Token\r\n    function mintTo( address to, uint256 value ) public returns (bool success) {\r\n        balances_[to] += value;\r\n        totalSupply += value;\r\n\r\n        emit Mint( to, value );\r\n        return true;\r\n    }\r\n\r\n    // Ethereum Token\r\n    function burn( uint256 value ) public returns (bool success) {\r\n        require( balances_[msg.sender] >= value );\r\n        balances_[msg.sender] -= value;\r\n        totalSupply -= value;\r\n\r\n        emit Burn( msg.sender, value );\r\n        return true;\r\n    }\r\n\r\n    // Ethereum Token\r\n    function burnFrom( address from, uint256 value ) public returns (bool success) {\r\n        require( balances_[from] >= value );\r\n        require( value <= allowances_[from][msg.sender] );\r\n\r\n        balances_[from] -= value;\r\n        allowances_[from][msg.sender] -= value;\r\n        totalSupply -= value;\r\n\r\n        emit Burn( from, value );\r\n        return true;\r\n    }\r\n\r\n    function _transfer( address from,\r\n                        address to,\r\n                        uint value,\r\n                        bytes memory data ) internal {\r\n        require( to != address(0x0) );\r\n        require( balances_[from] >= value );\r\n        require( balances_[to] + value > balances_[to] ); // catch overflow\r\n\r\n        balances_[from] -= value;\r\n        balances_[to] += value;\r\n\r\n        //Transfer( from, to, value, data ); ERC223-compat version\r\n        bytes memory empty;\r\n        empty = data;\r\n        emit Transfer( from, to, value ); // ERC20-compat version\r\n    }\r\n\r\n    // ERC223 Transfer to a contract or externally-owned account\r\n    function transfer( address to, uint value, bytes calldata data ) public returns (bool success) {\r\n        if (isContract(to)) {\r\n        return transferToContract( to, value, data );\r\n        }\r\n\r\n        _transfer( msg.sender, to, value, data );\r\n        return true;\r\n    }\r\n\r\n    // ERC223 Transfer to contract and invoke tokenFallback() method\r\n    function transferToContract( address to, uint value, bytes calldata data ) private returns (bool success) {\r\n        _transfer( msg.sender, to, value, data );\r\n\r\n        ERC233ContractReceiver rx = ERC233ContractReceiver(to);\r\n        rx.tokenFallback(msg.sender, value, data);\r\n        return true;\r\n    }\r\n\r\n    // ERC223 Transfer and invoke specified callback\r\n    function transferToContract( address to,\r\n                       uint value,\r\n                       bytes calldata data,\r\n                       string calldata custom_fallback ) private returns (bool success) {\r\n        _transfer( msg.sender, to, value, data );\r\n\r\n        ERC233ContractReceiver rx = ERC233ContractReceiver( to );\r\n        (bool resok, bytes memory resdata) =\r\n            address(rx).call( abi.encodeWithSignature(custom_fallback,\r\n                            msg.sender, value, data) );\r\n\r\n        require( resok, \"custom fallback failed\" );\r\n        if (resdata.length > 0) {} // suppress warning\r\n\r\n        return true;\r\n    }\r\n\r\n    // ERC223 fetch contract size (must be nonzero to be a contract)\r\n    function isContract( address _addr ) internal view returns (bool) {\r\n        uint length;\r\n        assembly { length := extcodesize(_addr) }\r\n        return (length > 0);\r\n    }\r\n}\r\n",
-  "sourcePath": "C:\\Users\\nimish\\Programs\\Courses\\Web3\\project-1-dex-swap\\contract\\contracts\\ERC233.sol",
+  "source": "// SPDX-License-Identifier: UNLICENSED\r\n\r\npragma solidity ^0.8.13;\r\n\r\n// https://www.ethereum.org/token\r\ninterface ERC223TokenRecipient {\r\n    function receiveApproval( address from, uint256 value, bytes calldata data )\r\n    external;\r\n}\r\n\r\n// ERC223\r\ninterface ERC223ContractReceiver {\r\n    function tokenFallback( address from, uint value, bytes calldata data )\r\n    external;\r\n}\r\n\r\n// ERC223 token with added ERC20 and Ethereum-Token support\r\n//\r\n// Blend of multiple interfaces:\r\n// - https://theethereum.wiki/w/index.php/ERC20_Token_Standard\r\n// - https://www.ethereum.org/token (uncontrolled, non-standard)\r\n// - https://github.com/Dexaran/ERC23-tokens/\r\n\r\ncontract ERC223\r\n{\r\n    string  public name;\r\n    string  public symbol;\r\n    uint8   public decimals;\r\n    uint256 public totalSupply;\r\n\r\n    mapping( address => uint256 ) balances_;\r\n    mapping( address => mapping(address => uint256) ) allowances_;\r\n\r\n    // ERC20\r\n    event Approval( address indexed owner,\r\n                    address indexed spender,\r\n                    uint256 value );\r\n\r\n    event Transfer( address indexed from,\r\n                    address indexed to,\r\n                    uint256 value );\r\n\r\n    // Ethereum Token\r\n    event Burn( address indexed from, uint256 value );\r\n    event Mint( address indexed to, uint256 value );  \r\n\r\n    constructor(string memory tokenName, string memory tokenSymbol ) {\r\n        name = tokenName;\r\n        symbol = tokenSymbol;\r\n        decimals = 18;\r\n    }\r\n\r\n    receive() external payable { revert(\"does not accept eth\"); }\r\n    fallback() external payable { revert(\"calldata does not match a function\"); }\r\n\r\n    // ERC20\r\n    function balanceOf( address owner ) public view returns (uint) {\r\n        return balances_[owner];\r\n    }\r\n\r\n    // ERC20\r\n    //\r\n    // WARNING! When changing the approval amount, first set it back to zero\r\n    // AND wait until the transaction is mined. Only afterwards set the new\r\n    // amount. Otherwise you may be prone to a race condition attack.\r\n    // See: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\r\n    function approve( address spender, uint256 value ) public returns (bool success) {\r\n        allowances_[msg.sender][spender] = value;\r\n        emit Approval( msg.sender, spender, value );\r\n        return true;\r\n    }\r\n    \r\n    // recommended fix for known attack on any ERC20\r\n    function safeApprove( address _spender,\r\n                          uint256 _currentValue,\r\n                          uint256 _value ) public returns (bool success) {\r\n\r\n        // If current allowance for _spender is equal to _currentValue, then\r\n        // overwrite it with _value and return true, otherwise return false.\r\n\r\n        if (allowances_[msg.sender][_spender] == _currentValue)\r\n            return approve(_spender, _value);\r\n\r\n        return false;\r\n    }\r\n\r\n    // ERC20\r\n    function allowance( address owner, address spender ) public view returns (uint256 remaining) {\r\n        return allowances_[owner][spender];\r\n    }\r\n\r\n    // ERC20\r\n    function transfer( address to, uint256 value ) virtual public returns (bool success) {\r\n        bytes memory empty; // null\r\n        _transfer( msg.sender, to, value, empty );\r\n        return true;\r\n    }\r\n\r\n    // ERC20\r\n    function transferFrom( address from, address to, uint256 value ) virtual public returns (bool success) {\r\n        require( value <= allowances_[from][msg.sender] );\r\n\r\n        allowances_[from][msg.sender] -= value;\r\n        bytes memory empty;\r\n        _transfer( from, to, value, empty );\r\n\r\n        return true;\r\n    }\r\n\r\n    // Ethereum Token\r\n    function approveAndCall( address spender,\r\n                            uint256 value,\r\n                            bytes calldata context ) public returns (bool success) {\r\n        if ( approve(spender, value) )\r\n        {\r\n            ERC223TokenRecipient recip = ERC223TokenRecipient( spender );\r\n            recip.receiveApproval( msg.sender, value, context );\r\n            return true;\r\n        }\r\n        return false;\r\n    }        \r\n\r\n    // Ethereum Token\r\n    function mint( uint256 value ) public returns (bool success) {\r\n        balances_[msg.sender] += value;\r\n        totalSupply += value;\r\n\r\n        emit Mint( msg.sender, value );\r\n        return true;\r\n    }\r\n\r\n    // Ethereum Token\r\n    function mintTo( address to, uint256 value ) public returns (bool success) {\r\n        balances_[to] += value;\r\n        totalSupply += value;\r\n\r\n        emit Mint( to, value );\r\n        return true;\r\n    }\r\n\r\n    // Ethereum Token\r\n    function burn( uint256 value ) public returns (bool success) {\r\n        require( balances_[msg.sender] >= value );\r\n        balances_[msg.sender] -= value;\r\n        totalSupply -= value;\r\n\r\n        emit Burn( msg.sender, value );\r\n        return true;\r\n    }\r\n\r\n    // Ethereum Token\r\n    function burnFrom( address from, uint256 value ) public returns (bool success) {\r\n        require( balances_[from] >= value );\r\n        require( value <= allowances_[from][msg.sender] );\r\n\r\n        balances_[from] -= value;\r\n        allowances_[from][msg.sender] -= value;\r\n        totalSupply -= value;\r\n\r\n        emit Burn( from, value );\r\n        return true;\r\n    }\r\n\r\n    function _transfer( address from,\r\n                        address to,\r\n                        uint value,\r\n                        bytes memory data ) internal {\r\n        require( to != address(0x0) );\r\n        require( balances_[from] >= value );\r\n        require( balances_[to] + value > balances_[to] ); // catch overflow\r\n\r\n        balances_[from] -= value;\r\n        balances_[to] += value;\r\n\r\n        //Transfer( from, to, value, data ); ERC223-compat version\r\n        bytes memory empty;\r\n        empty = data;\r\n        emit Transfer( from, to, value ); // ERC20-compat version\r\n    }\r\n\r\n    // ERC223 Transfer to a contract or externally-owned account\r\n    function transfer( address to, uint value, bytes calldata data ) public returns (bool success) {\r\n        if (isContract(to)) {\r\n        return transferToContract( to, value, data );\r\n        }\r\n\r\n        _transfer( msg.sender, to, value, data );\r\n        return true;\r\n    }\r\n\r\n    // ERC223 Transfer to contract and invoke tokenFallback() method\r\n    function transferToContract( address to, uint value, bytes calldata data ) private returns (bool success) {\r\n        _transfer( msg.sender, to, value, data );\r\n\r\n        ERC223ContractReceiver rx = ERC223ContractReceiver(to);\r\n        rx.tokenFallback(msg.sender, value, data);\r\n        return true;\r\n    }\r\n\r\n    // ERC223 Transfer and invoke specified callback\r\n    function transferToContract( address to,\r\n                       uint value,\r\n                       bytes calldata data,\r\n                       string calldata custom_fallback ) private returns (bool success) {\r\n        _transfer( msg.sender, to, value, data );\r\n\r\n        ERC223ContractReceiver rx = ERC223ContractReceiver( to );\r\n        (bool resok, bytes memory resdata) =\r\n            address(rx).call( abi.encodeWithSignature(custom_fallback,\r\n                            msg.sender, value, data) );\r\n\r\n        require( resok, \"custom fallback failed\" );\r\n        if (resdata.length > 0) {} // suppress warning\r\n\r\n        return true;\r\n    }\r\n\r\n    // ERC223 fetch contract size (must be nonzero to be a contract)\r\n    function isContract( address _addr ) internal view returns (bool) {\r\n        uint length;\r\n        assembly { length := extcodesize(_addr) }\r\n        return (length > 0);\r\n    }\r\n}\r\n",
+  "sourcePath": "C:\\Users\\nimish\\Programs\\Courses\\Web3\\project-1-dex-swap\\contract\\contracts\\ERC223.sol",
   "ast": {
-    "absolutePath": "project:/contracts/ERC233.sol",
+    "absolutePath": "project:/contracts/ERC223.sol",
     "exportedSymbols": {
       "ERC223": [
         653
       ],
-      "ERC233ContractReceiver": [
+      "ERC223ContractReceiver": [
         21
       ],
-      "ERC233TokenRecipient": [
+      "ERC223TokenRecipient": [
         11
       ]
     },
@@ -66,7 +66,7 @@
       {
         "abstract": false,
         "baseContracts": [],
-        "canonicalName": "ERC233TokenRecipient",
+        "canonicalName": "ERC223TokenRecipient",
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
@@ -74,7 +74,7 @@
         "linearizedBaseContracts": [
           11
         ],
-        "name": "ERC233TokenRecipient",
+        "name": "ERC223TokenRecipient",
         "nameLocation": "115:20:0",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -196,7 +196,7 @@
       {
         "abstract": false,
         "baseContracts": [],
-        "canonicalName": "ERC233ContractReceiver",
+        "canonicalName": "ERC223ContractReceiver",
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
@@ -204,7 +204,7 @@
         "linearizedBaseContracts": [
           21
         ],
-        "name": "ERC233ContractReceiver",
+        "name": "ERC223ContractReceiver",
         "nameLocation": "262:22:0",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -3284,15 +3284,15 @@
                             "stateVariable": false,
                             "storageLocation": "default",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_ERC233TokenRecipient_$11",
-                              "typeString": "contract ERC233TokenRecipient"
+                              "typeIdentifier": "t_contract$_ERC223TokenRecipient_$11",
+                              "typeString": "contract ERC223TokenRecipient"
                             },
                             "typeName": {
                               "id": 270,
                               "nodeType": "UserDefinedTypeName",
                               "pathNode": {
                                 "id": 269,
-                                "name": "ERC233TokenRecipient",
+                                "name": "ERC223TokenRecipient",
                                 "nodeType": "IdentifierPath",
                                 "referencedDeclaration": 11,
                                 "src": "3851:20:0"
@@ -3300,8 +3300,8 @@
                               "referencedDeclaration": 11,
                               "src": "3851:20:0",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_ERC233TokenRecipient_$11",
-                                "typeString": "contract ERC233TokenRecipient"
+                                "typeIdentifier": "t_contract$_ERC223TokenRecipient_$11",
+                                "typeString": "contract ERC223TokenRecipient"
                               }
                             },
                             "visibility": "internal"
@@ -3331,14 +3331,14 @@
                               }
                             ],
                             "id": 272,
-                            "name": "ERC233TokenRecipient",
+                            "name": "ERC223TokenRecipient",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
                             "referencedDeclaration": 11,
                             "src": "3880:20:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_ERC233TokenRecipient_$11_$",
-                              "typeString": "type(contract ERC233TokenRecipient)"
+                              "typeIdentifier": "t_type$_t_contract$_ERC223TokenRecipient_$11_$",
+                              "typeString": "type(contract ERC223TokenRecipient)"
                             }
                           },
                           "id": 274,
@@ -3352,8 +3352,8 @@
                           "src": "3880:31:0",
                           "tryCall": false,
                           "typeDescriptions": {
-                            "typeIdentifier": "t_contract$_ERC233TokenRecipient_$11",
-                            "typeString": "contract ERC233TokenRecipient"
+                            "typeIdentifier": "t_contract$_ERC223TokenRecipient_$11",
+                            "typeString": "contract ERC223TokenRecipient"
                           }
                         },
                         "nodeType": "VariableDeclarationStatement",
@@ -3436,8 +3436,8 @@
                               "referencedDeclaration": 271,
                               "src": "3926:5:0",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_ERC233TokenRecipient_$11",
-                                "typeString": "contract ERC233TokenRecipient"
+                                "typeIdentifier": "t_contract$_ERC223TokenRecipient_$11",
+                                "typeString": "contract ERC223TokenRecipient"
                               }
                             },
                             "id": 278,
@@ -6857,15 +6857,15 @@
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_ERC233ContractReceiver_$21",
-                        "typeString": "contract ERC233ContractReceiver"
+                        "typeIdentifier": "t_contract$_ERC223ContractReceiver_$21",
+                        "typeString": "contract ERC223ContractReceiver"
                       },
                       "typeName": {
                         "id": 556,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
                           "id": 555,
-                          "name": "ERC233ContractReceiver",
+                          "name": "ERC223ContractReceiver",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 21,
                           "src": "6411:22:0"
@@ -6873,8 +6873,8 @@
                         "referencedDeclaration": 21,
                         "src": "6411:22:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_ERC233ContractReceiver_$21",
-                          "typeString": "contract ERC233ContractReceiver"
+                          "typeIdentifier": "t_contract$_ERC223ContractReceiver_$21",
+                          "typeString": "contract ERC223ContractReceiver"
                         }
                       },
                       "visibility": "internal"
@@ -6904,14 +6904,14 @@
                         }
                       ],
                       "id": 558,
-                      "name": "ERC233ContractReceiver",
+                      "name": "ERC223ContractReceiver",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
                       "referencedDeclaration": 21,
                       "src": "6439:22:0",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_contract$_ERC233ContractReceiver_$21_$",
-                        "typeString": "type(contract ERC233ContractReceiver)"
+                        "typeIdentifier": "t_type$_t_contract$_ERC223ContractReceiver_$21_$",
+                        "typeString": "type(contract ERC223ContractReceiver)"
                       }
                     },
                     "id": 560,
@@ -6925,8 +6925,8 @@
                     "src": "6439:26:0",
                     "tryCall": false,
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_ERC233ContractReceiver_$21",
-                      "typeString": "contract ERC233ContractReceiver"
+                      "typeIdentifier": "t_contract$_ERC223ContractReceiver_$21",
+                      "typeString": "contract ERC223ContractReceiver"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
@@ -7009,8 +7009,8 @@
                         "referencedDeclaration": 557,
                         "src": "6476:2:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_ERC233ContractReceiver_$21",
-                          "typeString": "contract ERC233ContractReceiver"
+                          "typeIdentifier": "t_contract$_ERC223ContractReceiver_$21",
+                          "typeString": "contract ERC223ContractReceiver"
                         }
                       },
                       "id": 564,
@@ -7344,15 +7344,15 @@
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_ERC233ContractReceiver_$21",
-                        "typeString": "contract ERC233ContractReceiver"
+                        "typeIdentifier": "t_contract$_ERC223ContractReceiver_$21",
+                        "typeString": "contract ERC223ContractReceiver"
                       },
                       "typeName": {
                         "id": 596,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
                           "id": 595,
-                          "name": "ERC233ContractReceiver",
+                          "name": "ERC223ContractReceiver",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 21,
                           "src": "6884:22:0"
@@ -7360,8 +7360,8 @@
                         "referencedDeclaration": 21,
                         "src": "6884:22:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_ERC233ContractReceiver_$21",
-                          "typeString": "contract ERC233ContractReceiver"
+                          "typeIdentifier": "t_contract$_ERC223ContractReceiver_$21",
+                          "typeString": "contract ERC223ContractReceiver"
                         }
                       },
                       "visibility": "internal"
@@ -7391,14 +7391,14 @@
                         }
                       ],
                       "id": 598,
-                      "name": "ERC233ContractReceiver",
+                      "name": "ERC223ContractReceiver",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
                       "referencedDeclaration": 21,
                       "src": "6912:22:0",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_contract$_ERC233ContractReceiver_$21_$",
-                        "typeString": "type(contract ERC233ContractReceiver)"
+                        "typeIdentifier": "t_type$_t_contract$_ERC223ContractReceiver_$21_$",
+                        "typeString": "type(contract ERC223ContractReceiver)"
                       }
                     },
                     "id": 600,
@@ -7412,8 +7412,8 @@
                     "src": "6912:28:0",
                     "tryCall": false,
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_ERC233ContractReceiver_$21",
-                      "typeString": "contract ERC233ContractReceiver"
+                      "typeIdentifier": "t_contract$_ERC223ContractReceiver_$21",
+                      "typeString": "contract ERC223ContractReceiver"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
@@ -7625,16 +7625,16 @@
                             "referencedDeclaration": 597,
                             "src": "7009:2:0",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_ERC233ContractReceiver_$21",
-                              "typeString": "contract ERC233ContractReceiver"
+                              "typeIdentifier": "t_contract$_ERC223ContractReceiver_$21",
+                              "typeString": "contract ERC223ContractReceiver"
                             }
                           }
                         ],
                         "expression": {
                           "argumentTypes": [
                             {
-                              "typeIdentifier": "t_contract$_ERC233ContractReceiver_$21",
-                              "typeString": "contract ERC233ContractReceiver"
+                              "typeIdentifier": "t_contract$_ERC223ContractReceiver_$21",
+                              "typeString": "contract ERC223ContractReceiver"
                             }
                           ],
                           "id": 607,
@@ -8300,7 +8300,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-07-29T09:39:03.300Z",
+  "updatedAt": "2022-07-31T21:03:30.950Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
