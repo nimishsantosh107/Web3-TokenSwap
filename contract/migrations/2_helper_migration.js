@@ -1,11 +1,11 @@
-const NERC233Helper = artifacts.require("NERC233Helper");
-const NERC233Factory = artifacts.require("NERC233Factory");
+const NERC223Helper = artifacts.require("NERC223Helper");
+const NERC223Factory = artifacts.require("NERC223Factory");
 
 module.exports = async function (deployer) {
-    await deployer.deploy(NERC233Helper);
+    await deployer.deploy(NERC223Helper);
 
-    const factory = await NERC233Factory.deployed();
-    const helper = await NERC233Helper.deployed();
+    const factory = await NERC223Factory.deployed();
+    const helper = await NERC223Helper.deployed();
 
     const tokenAddresses = await factory.getTokens();
 

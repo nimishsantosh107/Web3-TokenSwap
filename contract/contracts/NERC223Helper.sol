@@ -2,12 +2,12 @@
 
 pragma solidity ^0.8.13;
 
-import "./NERC233.sol";
+import "./NERC223.sol";
 
 /*
-WORKS ONLY WITH `NERC233` TOKENS
+WORKS ONLY WITH `NERC223` TOKENS
 */
-contract NERC233Helper {
+contract NERC223Helper {
     mapping(string => address) private tokenSymbolToAddress;
     mapping(address => string) private tokenAddressToSymbol;
 
@@ -33,13 +33,13 @@ contract NERC233Helper {
     }
 
     function _getTokenBalance(address _account, address payable _tokenAddress) public view returns(uint) {
-        NERC233 token = NERC233(_tokenAddress); // address not new init params
+        NERC223 token = NERC223(_tokenAddress); // address not new init params
         return token.balanceOf(_account);
     }
 
     /* MINT TOKEN */
     function _mintToken(address _account, address payable _tokenAddress, uint _amount) public {
-        NERC233 token = NERC233(_tokenAddress);
+        NERC223 token = NERC223(_tokenAddress);
         token.mintTo(_account, _amount);
     }
 
@@ -51,7 +51,7 @@ contract NERC233Helper {
 
     /* BURN TOKEN */
     function _burnToken(address _account, address payable _tokenAddress, uint _amount) public {
-        NERC233 token = NERC233(_tokenAddress);
+        NERC223 token = NERC223(_tokenAddress);
         token.burnFrom(_account, _amount);
     }
 

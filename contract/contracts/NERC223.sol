@@ -2,16 +2,16 @@
 
 pragma solidity ^0.8.13;
 
-import "./ERC233.sol";
+import "./ERC223.sol";
 
-// NERC233 factory
-contract NERC233Factory {
+// NERC223 factory
+contract NERC223Factory {
     address[] private _deployedTokens;
     mapping(address => string) private _addressToSymbol; // TOKEN_ADDR >> SYMBOL
     mapping(string => address) private _symbolToAddress; // SYMBOL >> TOKEN_ADDR
 
     function createToken(string memory name, string memory symbol) public {
-        NERC233 token = new NERC233(name, symbol);
+        NERC223 token = new NERC223(name, symbol);
         address tokenAddress = address(token);
         _deployedTokens.push(tokenAddress);
         _addressToSymbol[tokenAddress] = symbol;
@@ -32,11 +32,11 @@ contract NERC233Factory {
 }
 
 // NERC223 Receiver Interface
-interface NERC233ContractReceiver is ERC233ContractReceiver {
+interface NERC223ContractReceiver is ERC223ContractReceiver {
     function tokenAddressFallback( address from, uint value, address tokenAddress ) external;
 }
 
-contract NERC233 is ERC223 {
+contract NERC223 is ERC223 {
     constructor(string memory name, string memory symbol) ERC223(name, symbol) {}
 
     // NERC223 Transfer to a contract or externally-owned account
@@ -67,7 +67,7 @@ contract NERC233 is ERC223 {
         bytes memory empty;
         _transfer( from, to, value, empty );
 
-        NERC233ContractReceiver rx = NERC233ContractReceiver(to);
+        NERC223ContractReceiver rx = NERC223ContractReceiver(to);
         rx.tokenAddressFallback(from, value, address(this)); // token address
         return true;
     }

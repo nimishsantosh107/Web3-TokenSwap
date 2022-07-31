@@ -2,27 +2,29 @@
 
 pragma solidity ^0.8.13;
 
-import "./NERC233.sol";
-import "./NERC233Helper.sol";
+import "./NERC223.sol";
+import "./NERC223Helper.sol";
 
-contract NERC233Swap is NERC233ContractReceiver {
-    NERC233Helper private helper;
+contract NERC223Swap is NERC223ContractReceiver {
+    NERC223Helper private helper;
     string private tokenSymbolLP;
+    address payable tokenAddressLP;
 
     string public poolName;
     mapping(address => mapping(string => uint)) private deposits; // USER_ADDR >> SYMBOL >> AMOUNT
 
     constructor(string memory _poolName, address _helperAddress, string memory _tokenSymbolLP) {
         poolName = _poolName;
-        helper = NERC233Helper(_helperAddress);
+        helper = NERC223Helper(_helperAddress);
         tokenSymbolLP = _tokenSymbolLP;
+        tokenAddressLP = payable(helper.getTokenAddress(tokenSymbolLP));
     }
 
     function getDeposits(address _user, string calldata _symbol) public view returns(uint) {
         return deposits[_user][_symbol];
     }
 
-    // ERC233 fallback not overridden
+    // ERC223 fallback not overridden
     function tokenFallback(address from, uint value, bytes calldata data) external {}
 
     function tokenAddressFallback(address from, uint value, address tokenAddress) external {
@@ -45,7 +47,7 @@ contract NERC233Swap is NERC233ContractReceiver {
     // contract burns LP token from user
     function withdrawToken(string calldata _symbol, uint _value) public {
         address payable _tokenAddressLP = payable(helper.getTokenAddress(tokenSymbolLP));
-        NERC233 tokenLP = NERC233(_tokenAddressLP);
+        NERC223 tokenLP = NERC223(_tokenAddressLP);
         // checks
         require(helper.getTokenBalance(address(this), _symbol) > _value);
         require(deposits[msg.sender][_symbol] >= _value);
@@ -54,7 +56,7 @@ contract NERC233Swap is NERC233ContractReceiver {
         deposits[msg.sender][_symbol] -= _value;
         // transfer out to user
         address payable _tokenAddress = payable(helper.getTokenAddress(_symbol));
-        NERC233 token = NERC233(_tokenAddress);
+        NERC223 token = NERC223(_tokenAddress);
         token.transfer(msg.sender, _value);
         // burn LP token from user
         helper.burnToken(msg.sender, tokenSymbolLP, _value);
@@ -65,7 +67,7 @@ contract NERC233Swap is NERC233ContractReceiver {
     // swap calls 2 transferFrom() (USER > CONTRACT, CONTRACT > USER)
     function swapTokens(string calldata _symbolIn, string calldata _symbolOut, uint _valueIn, uint _valueOut) external {
         address payable _tokenAddressIn = payable(helper.getTokenAddress(_symbolIn));
-        NERC233 tokenIn = NERC233(_tokenAddressIn);
+        NERC223 tokenIn = NERC223(_tokenAddressIn);
         // checks
         // how to make sure valueOut isn't corrupted (ie user isnt cheated)
         require(tokenIn.allowance(msg.sender, address(this)) >= _valueIn);

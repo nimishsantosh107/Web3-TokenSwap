@@ -1,10 +1,10 @@
-const NERC233Factory = artifacts.require("NERC233Factory");
+const NERC223Factory = artifacts.require("NERC223Factory");
 
 module.exports = async function (deployer) {
-    await deployer.deploy(NERC233Factory);
+    await deployer.deploy(NERC223Factory);
 
     // const accounts = await web3.eth.getAccounts();
-    const factory = await NERC233Factory.deployed();
+    const factory = await NERC223Factory.deployed();
 
     const trx0 = await factory.createToken("Swap LP", "SLP");
     const trx1 = await factory.createToken("Token 1", "TK1");

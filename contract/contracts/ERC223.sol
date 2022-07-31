@@ -3,13 +3,13 @@
 pragma solidity ^0.8.13;
 
 // https://www.ethereum.org/token
-interface ERC233TokenRecipient {
+interface ERC223TokenRecipient {
     function receiveApproval( address from, uint256 value, bytes calldata data )
     external;
 }
 
 // ERC223
-interface ERC233ContractReceiver {
+interface ERC223ContractReceiver {
     function tokenFallback( address from, uint value, bytes calldata data )
     external;
 }
@@ -113,7 +113,7 @@ contract ERC223
                             bytes calldata context ) public returns (bool success) {
         if ( approve(spender, value) )
         {
-            ERC233TokenRecipient recip = ERC233TokenRecipient( spender );
+            ERC223TokenRecipient recip = ERC223TokenRecipient( spender );
             recip.receiveApproval( msg.sender, value, context );
             return true;
         }
@@ -192,7 +192,7 @@ contract ERC223
     function transferToContract( address to, uint value, bytes calldata data ) private returns (bool success) {
         _transfer( msg.sender, to, value, data );
 
-        ERC233ContractReceiver rx = ERC233ContractReceiver(to);
+        ERC223ContractReceiver rx = ERC223ContractReceiver(to);
         rx.tokenFallback(msg.sender, value, data);
         return true;
     }
@@ -204,7 +204,7 @@ contract ERC223
                        string calldata custom_fallback ) private returns (bool success) {
         _transfer( msg.sender, to, value, data );
 
-        ERC233ContractReceiver rx = ERC233ContractReceiver( to );
+        ERC223ContractReceiver rx = ERC223ContractReceiver( to );
         (bool resok, bytes memory resdata) =
             address(rx).call( abi.encodeWithSignature(custom_fallback,
                             msg.sender, value, data) );
