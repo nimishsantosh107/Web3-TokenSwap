@@ -39,16 +39,16 @@ const FaucetForm = (props) => {
                     list={Object.keys(props.tokens)}
                     onSelectCallback={setTokenF}
                 />
-                <div className="faucetform__button-container">
-                    <button
-                        className="faucetform__button"
-                        onClick={() => {
-                            handleMint();
-                        }}
-                    >
-                        Mint
-                    </button>
-                </div>
+            </div>
+            <div className="faucetform__button-container">
+                <button
+                    className="faucetform__button"
+                    onClick={() => {
+                        handleMint();
+                    }}
+                >
+                    Mint
+                </button>
             </div>
         </div>
     );

@@ -1,4 +1,3 @@
-import "./App.css";
 import React from "react";
 
 import { connect } from "react-redux";
@@ -13,12 +12,9 @@ import Liquidity from "./containers/Liquidity/Liquidity";
 import Faucet from "./containers/Faucet/Faucet";
 
 import { initTokensAndContracts } from "./actions";
+import "./App.css";
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidUpdate = () => {
         if (this.props.web3.eth) {
             this.props.initTokensAndContracts();
@@ -59,3 +55,9 @@ const mapStateToProps = (state, ownProps) => ({
 export default connect(mapStateToProps, {
     initTokensAndContracts,
 })(App);
+
+/*
+TODOX
+https://17.reactjs.org/docs/concurrent-mode-suspense.html
+react-portal
+*/

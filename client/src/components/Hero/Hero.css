@@ -1,11 +1,12 @@
-.preconnect {
+.hero {
+    width: 100%;
+
     background: rgba(217, 217, 217, 0.941);
     backdrop-filter: blur(10px);
-    border-radius: 30px;
+    border-radius: 20px;
     box-shadow: -6px 6px 12px rgba(0, 0, 0, 0.25);
 
-    margin-top: 80px;
-    padding: 100px 150px;
+    padding: 80px 50px;
 
     display: flex;
     flex-direction: column;
@@ -13,16 +14,30 @@
     align-items: center;
 }
 
-.preconnect h1 {
+.hero h1 {
     font-family: "Outfit";
     font-style: normal;
     font-weight: 700;
     font-size: 44px;
-    line-height: 45px;
+    line-height: 60px;
     text-align: center;
 
     background: -webkit-linear-gradient(107.56deg, #241a54 0%, #511436 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.hero h2 {
+    margin-top: 15px;
+    width: 70%;
+
+    font-family: "Outfit";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 35px;
+    text-align: center;
+
+    color: rgba(0, 0, 0, 0.872);
 }

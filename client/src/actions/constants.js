@@ -1,4 +1,4 @@
-export const constants = {
+export const actionConstants = {
     CONNECT_WALLET: "CONNECT_WALLET",
     CHANGE_ACCOUNT: "CHANGE_ACCOUNT",
     CHANGE_CHAIN: "CHANGE_CHAIN",

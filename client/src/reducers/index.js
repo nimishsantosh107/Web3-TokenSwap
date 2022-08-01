@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
-import { constants } from "../actions/constants";
+import { actionConstants } from "../actions/constants";
 
 const web3Reducer = (web3 = {}, action) => {
     switch (action.type) {
-        case constants.CONNECT_WALLET:
+        case actionConstants.CONNECT_WALLET:
             return action.payload.web3;
         default:
             return web3;
@@ -12,11 +12,11 @@ const web3Reducer = (web3 = {}, action) => {
 
 const accountReducer = (account = "0x0", action) => {
     switch (action.type) {
-        case constants.CONNECT_WALLET:
+        case actionConstants.CONNECT_WALLET:
             return action.payload.account;
-        case constants.CHANGE_ACCOUNT:
+        case actionConstants.CHANGE_ACCOUNT:
             return action.payload.account;
-        case constants.CHANGE_CHAIN:
+        case actionConstants.CHANGE_CHAIN:
             return action.payload.account;
         default:
             return account;
@@ -25,11 +25,11 @@ const accountReducer = (account = "0x0", action) => {
 
 const balanceReducer = (balance = 0, action) => {
     switch (action.type) {
-        case constants.CONNECT_WALLET:
+        case actionConstants.CONNECT_WALLET:
             return action.payload.balance;
-        case constants.CHANGE_ACCOUNT:
+        case actionConstants.CHANGE_ACCOUNT:
             return action.payload.balance;
-        case constants.CHANGE_CHAIN:
+        case actionConstants.CHANGE_CHAIN:
             return action.payload.balance;
         default:
             return balance;
@@ -38,9 +38,9 @@ const balanceReducer = (balance = 0, action) => {
 
 const networkReducer = (network = "...", action) => {
     switch (action.type) {
-        case constants.CONNECT_WALLET:
+        case actionConstants.CONNECT_WALLET:
             return action.payload.network;
-        case constants.CHANGE_CHAIN:
+        case actionConstants.CHANGE_CHAIN:
             return action.payload.network;
         default:
             return network;
@@ -49,7 +49,7 @@ const networkReducer = (network = "...", action) => {
 
 const tokensReducer = (tokens = {}, action) => {
     switch (action.type) {
-        case constants.INIT_TOKENS_CONTRACTS:
+        case actionConstants.INIT_TOKENS_CONTRACTS:
             return action.payload.tokens;
         default:
             return tokens;
@@ -58,7 +58,7 @@ const tokensReducer = (tokens = {}, action) => {
 
 const contractsReducer = (contracts = {}, action) => {
     switch (action.type) {
-        case constants.INIT_TOKENS_CONTRACTS:
+        case actionConstants.INIT_TOKENS_CONTRACTS:
             return action.payload.contracts;
         default:
             return contracts;
@@ -67,7 +67,7 @@ const contractsReducer = (contracts = {}, action) => {
 
 const liquidityInformationReducer = (liquidity = {}, action) => {
     switch (action.type) {
-        case constants.UPDATE_LIQUIDITY_INFO:
+        case actionConstants.UPDATE_LIQUIDITY_INFO:
             return action.payload.liquidity;
         default:
             return liquidity;
@@ -87,7 +87,7 @@ const tokenPriceInformationReducer = (price = {}, action) => {
 
 const liquidityUpdatesCounterReducer = (updatesCounter = "", action) => {
     switch (action.type) {
-        case constants.LIQUIDITY_UPDATE_PERFORMED:
+        case actionConstants.LIQUIDITY_UPDATE_PERFORMED:
             return updatesCounter + 1;
         default:
             return updatesCounter;

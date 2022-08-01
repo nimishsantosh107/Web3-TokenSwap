@@ -31,23 +31,20 @@ const Header = (props) => {
         return (
             <nav className="header__nav">
                 {nameURLList.map((item) => {
-                    if (windowLocation.pathname === item.url) {
-                        return (
-                            <Link
-                                key={item.url}
-                                to={item.url}
-                                className="header__navitem header__navitem--active"
-                            >
-                                {item.name}
-                            </Link>
-                        );
-                    } else {
-                        return (
-                            <Link key={item.url} to={item.url} className="header__navitem">
-                                {item.name}
-                            </Link>
-                        );
-                    }
+                    return (
+                        <Link
+                            key={item.url}
+                            to={item.url}
+                            className={
+                                "header__navitem " +
+                                (windowLocation.pathname === item.url
+                                    ? "header__navitem--active"
+                                    : "")
+                            }
+                        >
+                            {item.name}
+                        </Link>
+                    );
                 })}
             </nav>
         );

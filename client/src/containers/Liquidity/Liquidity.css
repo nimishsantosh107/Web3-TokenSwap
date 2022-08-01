@@ -1,6 +1,20 @@
-.swap__container {
+.liquidity__hero {
+    margin-top: 70px;
+    padding: 0px 100px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.liquidity__hero .hero {
+    width: 70%;
+}
+
+.liquidity__body {
     display: flex;
     justify-content: center;
 
-    padding: 100px;
+    margin-top: 30px;
+    padding: 0px 100px;
 }
