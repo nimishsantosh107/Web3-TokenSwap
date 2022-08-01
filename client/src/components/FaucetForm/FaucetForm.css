@@ -1,8 +1,9 @@
-.swapform {
+.faucetform {
     width: fit-content;
     height: auto;
 
-    padding: 30px;
+    margin: 30px;
+    padding: 60px;
 
     background: rgba(217, 217, 217, 0.2);
     backdrop-filter: blur(10px);
@@ -18,12 +19,10 @@ input[type="number"]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-/* .swapform__input-container {} */
-
-.swapform__text:focus {
+.faucetform__text:focus {
     outline-width: 0;
 }
-.swapform__text {
+.faucetform__text {
     border: none;
 
     height: 35px;
@@ -43,17 +42,12 @@ input[type="number"]::-webkit-outer-spin-button {
     border-radius: 6px;
 }
 
-.swapform__hr {
-    border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.swapform__button-container {
+.faucetform__button-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-evenly;
 }
 
-.swapform__button {
+.faucetform__button {
     all: unset;
     cursor: pointer;
 
@@ -66,20 +60,6 @@ input[type="number"]::-webkit-outer-spin-button {
     font-family: "Outfit", Roboto;
     font-style: normal;
     font-weight: 200;
-    font-size: 18px;
-    text-align: center;
-}
-
-.swapform__footer {
-    margin-top: 20px;
-
-    color: white;
-    font-family: "Outfit", Roboto;
-    font-style: normal;
-    font-weight: 200;
     font-size: 16px;
     text-align: center;
-
-    display: flex;
-    justify-content: space-evenly;
 }

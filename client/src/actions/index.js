@@ -92,24 +92,6 @@ export const getLiquidityInformation = () => {
     };
 };
 
-export const handleToken1Selected = (selectedToken) => {
-    return {
-        type: constants.SELECTED_TOKEN_1,
-        payload: {
-            token: selectedToken,
-        },
-    };
-};
-
-export const handleToken2Selected = (selectedToken) => {
-    return {
-        type: constants.SELECTED_TOKEN_2,
-        payload: {
-            token: selectedToken,
-        },
-    };
-};
-
 export const liquidityUpdateCounter = () => {
     return { type: constants.LIQUIDITY_UPDATE_PERFORMED };
 };

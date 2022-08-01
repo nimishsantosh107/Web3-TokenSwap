@@ -25,6 +25,7 @@ const Header = (props) => {
         const nameURLList = [
             { name: "Swap", url: "/" },
             { name: "Liquidity", url: "/liquidity" },
+            { name: "Faucet", url: "/faucet" },
         ];
 
         return (

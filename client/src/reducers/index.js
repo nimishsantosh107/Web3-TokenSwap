@@ -85,24 +85,6 @@ const tokenPriceInformationReducer = (price = {}, action) => {
     };
 };
 
-const dropdownToken1Reducer = (token = "", action) => {
-    switch (action.type) {
-        case constants.SELECTED_TOKEN_1:
-            return action.payload.token;
-        default:
-            return token;
-    }
-};
-
-const dropdownToken2Reducer = (token = "", action) => {
-    switch (action.type) {
-        case constants.SELECTED_TOKEN_2:
-            return action.payload.token;
-        default:
-            return token;
-    }
-};
-
 const liquidityUpdatesCounterReducer = (updatesCounter = "", action) => {
     switch (action.type) {
         case constants.LIQUIDITY_UPDATE_PERFORMED:
@@ -121,7 +103,5 @@ export default combineReducers({
     contracts: contractsReducer,
     liquidity: liquidityInformationReducer,
     price: tokenPriceInformationReducer,
-    token1: dropdownToken1Reducer,
-    token2: dropdownToken2Reducer,
     updatesCounter: liquidityUpdatesCounterReducer,
 });

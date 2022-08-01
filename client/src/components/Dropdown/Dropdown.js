@@ -9,7 +9,6 @@ class Dropdown extends React.Component {
         super(props);
         this.state = {
             isListOpen: false,
-            dropdownTitle: this.props.defaultTitle,
         };
     }
 
@@ -21,20 +20,19 @@ class Dropdown extends React.Component {
 
     handleOnSelect = (selectedItem) => {
         this.setState({
-            dropdownTitle: selectedItem,
             isListOpen: false,
         });
-        this.props.handleSelectedItem(selectedItem);
+        this.props.onSelectCallback(selectedItem);
     };
 
     render() {
-        const { isListOpen, dropdownTitle } = this.state;
+        const { isListOpen } = this.state;
         const { list } = this.props;
 
         return (
             <div className="dropdown">
                 <button type="button" className="dropdown__header" onClick={this.toggleList}>
-                    <div className="dropdown__header-title">{dropdownTitle}</div>
+                    <div className="dropdown__header-title">{this.props.value}</div>
                     {isListOpen ? (
                         <FontAwesomeIcon
                             className="dropdown__header-icon"

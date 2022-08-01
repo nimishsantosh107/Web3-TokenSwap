@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import Dropdown from "../Dropdown/Dropdown";
-import { handleTokenLSelected, liquidityUpdateCounter } from "../../actions";
+import { liquidityUpdateCounter } from "../../actions";
 
 const LiquidityForm = (props) => {
     const [inputAmountStr, setInputAmountStr] = useState("");
@@ -19,7 +19,7 @@ const LiquidityForm = (props) => {
 
         const trx = await tokens[tokenL].methods
             .transfer(contracts.swapContract._address, inputAmountStr + "0".repeat(18))
-            .send({ from: account, gas: 1500000 });
+            .send({ from: account });
         props.liquidityUpdateCounter();
     };
 
@@ -54,9 +54,9 @@ const LiquidityForm = (props) => {
                 />
                 <Dropdown
                     className="liqform__dropdown"
-                    defaultTitle={tokenL}
+                    value={tokenL}
                     list={Object.keys(props.tokens)}
-                    handleSelectedItem={setTokenL}
+                    onSelectCallback={setTokenL}
                 />
                 <div className="liqform__button-container">
                     <button
@@ -88,7 +88,6 @@ const LiquidityForm = (props) => {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-    web3: state.web3,
     account: state.account,
     contracts: state.contracts,
     tokens: state.tokens,
