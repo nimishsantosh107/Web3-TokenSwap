@@ -92,6 +92,21 @@ export const getLiquidityInformation = () => {
     };
 };
 
+export const fetchBalance = (tokenSymbol) => {
+    return async (dispatch, getState) => {
+        const { contracts, account } = getState();
+
+        let balance = await contracts.helperContract.methods
+            .getTokenBalance(account, tokenSymbol)
+            .call();
+
+        dispatch({
+            type: actionConstants.UPDATE_TOKEN_BALANCE,
+            payload: { balance },
+        });
+    };
+};
+
 export const liquidityUpdateCounter = () => {
     return { type: actionConstants.LIQUIDITY_UPDATE_PERFORMED };
 };

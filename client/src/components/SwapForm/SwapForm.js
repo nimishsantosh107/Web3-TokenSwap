@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import Dropdown from "../../components/Dropdown/Dropdown";
+import { fetchBalance } from "../../actions";
 
 const SwapForm = (props) => {
     const [token1, setToken1] = useState("");
@@ -15,6 +16,10 @@ const SwapForm = (props) => {
         setToken1(Object.keys(props.tokens)[1]);
         setToken2(Object.keys(props.tokens)[2]);
     }, [props.tokens]);
+
+    useEffect(() => {
+        props.fetchBalance(token1);
+    }, [token1]);
 
     const handleInputAmtChange = (value) => {
         setValue1(value);
@@ -34,8 +39,9 @@ const SwapForm = (props) => {
 
         const trx1 = await contracts.swapContract.methods
             .swapTokens(token1, token2, amount1, amount2)
-            .send({ from: account });
+            .send({ from: account, gas: 5500000 });
         props.liquidityUpdateCounter();
+        props.fetchBalance(token1);
     };
 
     return (
@@ -85,11 +91,17 @@ const SwapForm = (props) => {
                     Swap
                 </button>
             </div>
-
+            <div className="swapform__balance">
+                <span>Balance: </span>
+                <span>
+                    <b>{String(props.tokenBalance).slice(0, props.tokenBalance.length - 18)} </b>
+                    {token1}
+                </span>
+            </div>
             <div className="swapform__footer">
                 <span>Price: </span>
                 <span>
-                    <b>1 BNB = 1024 LOL</b>
+                    <b>1 X = 1 Y</b>
                 </span>
             </div>
         </div>
@@ -100,5 +112,6 @@ const mapStateToProps = (state, ownProps) => ({
     account: state.account,
     contracts: state.contracts,
     tokens: state.tokens,
+    tokenBalance: state.tokenBalance,
 });
-export default connect(mapStateToProps, {})(SwapForm);
+export default connect(mapStateToProps, { fetchBalance })(SwapForm);

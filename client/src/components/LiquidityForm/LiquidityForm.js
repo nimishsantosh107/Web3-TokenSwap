@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import Dropdown from "../Dropdown/Dropdown";
-import { liquidityUpdateCounter } from "../../actions";
+import { liquidityUpdateCounter, fetchBalance } from "../../actions";
 
 const LiquidityForm = (props) => {
     const [inputAmountStr, setInputAmountStr] = useState("");
@@ -14,6 +14,10 @@ const LiquidityForm = (props) => {
         setTokenL(Object.keys(props.tokens)[1]);
     }, [props.tokens]);
 
+    useEffect(() => {
+        props.fetchBalance(tokenL);
+    }, [tokenL]);
+
     const handleDeposit = async () => {
         const { account, contracts, tokens } = props;
 
@@ -21,6 +25,7 @@ const LiquidityForm = (props) => {
             .transfer(contracts.swapContract._address, inputAmountStr + "0".repeat(18))
             .send({ from: account });
         props.liquidityUpdateCounter();
+        props.fetchBalance(tokenL);
     };
 
     const handleWithdraw = async () => {
@@ -38,6 +43,7 @@ const LiquidityForm = (props) => {
             .send({ from: account });
 
         props.liquidityUpdateCounter();
+        props.fetchBalance(tokenL);
     };
 
     return (
@@ -77,10 +83,17 @@ const LiquidityForm = (props) => {
                     </button>
                 </div>
             </div>
+            <div className="liqform__balance">
+                <span>Balance: </span>
+                <span>
+                    <b>{String(props.tokenBalance).slice(0, props.tokenBalance.length - 18)} </b>
+                    {tokenL}
+                </span>
+            </div>
             <div className="liqform__footer">
                 <span>Price: </span>
                 <span>
-                    <b>1 BNB = 1024 LOL</b>
+                    <b>1 X = 1 Y</b>
                 </span>
             </div>
         </div>
@@ -91,7 +104,9 @@ const mapStateToProps = (state, ownProps) => ({
     account: state.account,
     contracts: state.contracts,
     tokens: state.tokens,
+    tokenBalance: state.tokenBalance,
 });
 export default connect(mapStateToProps, {
     liquidityUpdateCounter,
+    fetchBalance,
 })(LiquidityForm);

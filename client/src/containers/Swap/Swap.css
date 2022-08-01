@@ -7,6 +7,10 @@
     align-items: center;
 }
 
+.swap__hero .hero {
+    width: 34.5em;
+}
+
 .swap__body {
     display: flex;
     justify-content: center;

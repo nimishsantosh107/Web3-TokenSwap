@@ -63,6 +63,20 @@ input[type="number"]::-webkit-outer-spin-button {
     text-align: center;
 }
 
+.liqform__balance {
+    margin-top: 20px;
+
+    color: white;
+    font-family: "Outfit", Roboto;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 16px;
+    text-align: center;
+
+    display: flex;
+    justify-content: space-evenly;
+}
+
 .liqform__footer {
     margin-top: 20px;
 

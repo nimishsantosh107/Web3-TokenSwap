@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import Dropdown from "../Dropdown/Dropdown";
+import { fetchBalance } from "../../actions";
 
 const FaucetForm = (props) => {
     const [tokenF, setTokenF] = useState("");
@@ -13,12 +14,17 @@ const FaucetForm = (props) => {
         setTokenF(Object.keys(props.tokens)[1]);
     }, [props.tokens]);
 
+    useEffect(() => {
+        props.fetchBalance(tokenF);
+    }, [tokenF]);
+
     const handleMint = async () => {
         const { account, tokens } = props;
 
         const trx0 = await tokens[tokenF].methods
             .mint(valueF + "0".repeat(18))
             .send({ from: account });
+        props.fetchBalance(tokenF);
     };
 
     return (
@@ -50,6 +56,13 @@ const FaucetForm = (props) => {
                     Mint
                 </button>
             </div>
+            <div className="faucetform__balance">
+                <span>Balance: </span>
+                <span>
+                    <b>{String(props.tokenBalance).slice(0, props.tokenBalance.length - 18)} </b>
+                    {tokenF}
+                </span>
+            </div>
         </div>
     );
 };
@@ -57,5 +70,6 @@ const FaucetForm = (props) => {
 const mapStateToProps = (state, ownProps) => ({
     account: state.account,
     tokens: state.tokens,
+    tokenBalance: state.tokenBalance,
 });
-export default connect(mapStateToProps, {})(FaucetForm);
+export default connect(mapStateToProps, { fetchBalance })(FaucetForm);

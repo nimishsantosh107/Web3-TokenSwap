@@ -74,6 +74,15 @@ const liquidityInformationReducer = (liquidity = {}, action) => {
     }
 };
 
+const tokenBalanceReducer = (balance = 0, action) => {
+    switch (action.type) {
+        case actionConstants.UPDATE_TOKEN_BALANCE:
+            return action.payload.balance;
+        default:
+            return balance;
+    }
+};
+
 const tokenPriceInformationReducer = (price = {}, action) => {
     return {
         SLP2TK1: 1,
@@ -102,6 +111,7 @@ export default combineReducers({
     tokens: tokensReducer,
     contracts: contractsReducer,
     liquidity: liquidityInformationReducer,
+    tokenBalance: tokenBalanceReducer,
     price: tokenPriceInformationReducer,
     updatesCounter: liquidityUpdatesCounterReducer,
 });
