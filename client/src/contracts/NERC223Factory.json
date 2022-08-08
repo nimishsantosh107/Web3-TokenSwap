@@ -9819,15 +9819,15 @@
     "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
   "networks": {
-    "5777": {
+    "4": {
       "events": {},
       "links": {},
-      "address": "0xCB617d5898a92913402dFA0E83B2F6A4763c9e4D",
-      "transactionHash": "0xc01efb5abb466374d3d1a027c84005ef01f6d6540e80f91ced94eb3b9d10d94c"
+      "address": "0x26160f0789cE1cFC873dd1EaE575F31c03D52dB1",
+      "transactionHash": "0x5dfadf9de88268e5a46f5f2e4002da7ded243a60663633bac36991a6eeba9ba3"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-08-01T10:05:14.851Z",
+  "updatedAt": "2022-08-08T21:32:04.837Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

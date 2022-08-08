@@ -18,9 +18,10 @@
  *
  */
 
+require("dotenv").config();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const rinkebyEndpoint = "."; // TODO dotenv
-const mnemonic = ".";
+const rinkebyEndpoint = process.env.PROVIDER_NETWORK_URL;
+const mnemonic = process.env.PROVIDER_ACCOUNT_MNEMONIC;
 
 //
 // const fs = require('fs');

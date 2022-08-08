@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@truffle/hdwallet-provider": "^2.0.7"
+    "@truffle/hdwallet-provider": "^2.0.7",
+    "dotenv": "^16.0.1"
   }
 }
