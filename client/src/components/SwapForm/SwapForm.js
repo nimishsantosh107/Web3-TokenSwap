@@ -33,15 +33,26 @@ const SwapForm = (props) => {
         const amount1 = value1 + "0".repeat(18);
         const amount2 = value2 + "0".repeat(18);
 
-        const trx0 = await tokens[token1].methods
+        tokens[token1].methods
             .approve(contracts.swapContract._address, amount1)
-            .send({ from: account });
+            .send({ from: account })
+            .on("transactionHash", (hash) => {
+                console.log(hash);
+            })
+            .on("confirmation", (confirmationNumber, receipt) => {})
+            .on("receipt", (receipt) => {});
 
-        const trx1 = await contracts.swapContract.methods
+        contracts.swapContract.methods
             .swapTokens(token1, token2, amount1, amount2)
-            .send({ from: account, gas: 5500000 });
-        props.liquidityUpdateCounter();
-        props.fetchBalance(token1);
+            .send({ from: account, gas: 5500000 })
+            .on("transactionHash", (hash) => {
+                console.log(hash);
+            })
+            .on("confirmation", (confirmationNumber, receipt) => {})
+            .on("receipt", (receipt) => {
+                props.liquidityUpdateCounter();
+                props.fetchBalance(token1);
+            });
     };
 
     return (

@@ -2,9 +2,19 @@ import Web3 from "web3";
 
 class Web3Helper {
     async connectWallet() {
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        const web3 = new Web3(window.ethereum);
-        return web3;
+        try {
+            if (!window.ethereum) return alert("Install Metamask");
+
+            const accounts = await window.ethereum.request({
+                method: "eth_requestAccounts",
+            });
+            console.log("[1_CONNECT]: ", accounts[0]);
+            const web3 = new Web3(window.ethereum);
+            return web3;
+        } catch (e) {
+            console.error(e);
+            throw new Error("[ERR] No window.ethereum object");
+        }
     }
 
     async getNetwork(web3) {

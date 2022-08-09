@@ -21,10 +21,16 @@ const FaucetForm = (props) => {
     const handleMint = async () => {
         const { account, tokens } = props;
 
-        const trx0 = await tokens[tokenF].methods
+        tokens[tokenF].methods
             .mint(valueF + "0".repeat(18))
-            .send({ from: account });
-        props.fetchBalance(tokenF);
+            .send({ from: account })
+            .on("transactionHash", (hash) => {
+                console.log(hash);
+            })
+            .on("confirmation", (confirmationNumber, receipt) => {})
+            .on("receipt", (receipt) => {
+                props.fetchBalance(tokenF);
+            });
     };
 
     return (

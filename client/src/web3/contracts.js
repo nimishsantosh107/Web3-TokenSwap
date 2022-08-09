@@ -4,7 +4,7 @@ import NERC223Helper from "../contracts/NERC223Helper.json";
 import NERC223Factory from "../contracts/NERC223Factory.json";
 
 export const initializeTokensAndContracts = async (web3) => {
-    const NETWORK_ID = 5777; // private
+    const NETWORK_ID = 4; // rinkeby
 
     let contracts = {};
     let tokens = {};

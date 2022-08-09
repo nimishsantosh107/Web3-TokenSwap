@@ -21,11 +21,17 @@ const LiquidityForm = (props) => {
     const handleDeposit = async () => {
         const { account, contracts, tokens } = props;
 
-        const trx = await tokens[tokenL].methods
+        tokens[tokenL].methods
             .transfer(contracts.swapContract._address, inputAmountStr + "0".repeat(18))
-            .send({ from: account });
-        props.liquidityUpdateCounter();
-        props.fetchBalance(tokenL);
+            .send({ from: account })
+            .on("transactionHash", (hash) => {
+                console.log(hash);
+            })
+            .on("confirmation", (confirmationNumber, receipt) => {})
+            .on("receipt", (receipt) => {
+                props.liquidityUpdateCounter();
+                props.fetchBalance(tokenL);
+            });
     };
 
     const handleWithdraw = async () => {
@@ -34,16 +40,26 @@ const LiquidityForm = (props) => {
         const tokenLP = tokens[Object.keys(tokens)[0]];
         const amount = inputAmountStr + "0".repeat(18);
 
-        const trx0 = await tokenLP.methods
+        tokenLP.methods
             .approve(contracts.swapContract._address, amount)
-            .send({ from: account });
+            .send({ from: account })
+            .on("transactionHash", (hash) => {
+                console.log(hash);
+            })
+            .on("confirmation", (confirmationNumber, receipt) => {})
+            .on("receipt", (receipt) => {});
 
-        const trx1 = await contracts.swapContract.methods
+        contracts.swapContract.methods
             .withdrawToken(tokenL, amount)
-            .send({ from: account });
-
-        props.liquidityUpdateCounter();
-        props.fetchBalance(tokenL);
+            .send({ from: account })
+            .on("transactionHash", (hash) => {
+                console.log(hash);
+            })
+            .on("confirmation", (confirmationNumber, receipt) => {})
+            .on("receipt", (receipt) => {
+                props.liquidityUpdateCounter();
+                props.fetchBalance(tokenL);
+            });
     };
 
     return (
