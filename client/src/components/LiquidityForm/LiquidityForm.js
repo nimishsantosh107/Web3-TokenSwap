@@ -4,11 +4,13 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import Dropdown from "../Dropdown/Dropdown";
+import TransactionInfo from "../TransactionInfo/TransactionInfo";
 import { liquidityUpdateCounter, fetchBalance } from "../../actions";
 
 const LiquidityForm = (props) => {
     const [inputAmountStr, setInputAmountStr] = useState("");
     const [tokenL, setTokenL] = useState("");
+    const [trxHash, setTrxHash] = useState("");
 
     useEffect(() => {
         setTokenL(Object.keys(props.tokens)[1]);
@@ -44,6 +46,7 @@ const LiquidityForm = (props) => {
             .approve(contracts.swapContract._address, amount)
             .send({ from: account })
             .on("transactionHash", (hash) => {
+                setTrxHash(hash);
                 console.log(hash);
             })
             .on("confirmation", (confirmationNumber, receipt) => {})
@@ -53,6 +56,7 @@ const LiquidityForm = (props) => {
             .withdrawToken(tokenL, amount)
             .send({ from: account })
             .on("transactionHash", (hash) => {
+                setTrxHash(hash);
                 console.log(hash);
             })
             .on("confirmation", (confirmationNumber, receipt) => {})
@@ -112,6 +116,7 @@ const LiquidityForm = (props) => {
                     <b>1 X = 1 Y</b>
                 </span>
             </div>
+            <div>{trxHash === "" ? null : <TransactionInfo trxHash={trxHash} />}</div>
         </div>
     );
 };

@@ -4,11 +4,13 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import Dropdown from "../Dropdown/Dropdown";
+import TransactionInfo from "../TransactionInfo/TransactionInfo";
 import { fetchBalance } from "../../actions";
 
 const FaucetForm = (props) => {
     const [tokenF, setTokenF] = useState("");
     const [valueF, setValueF] = useState("");
+    const [trxHash, setTrxHash] = useState("");
 
     useEffect(() => {
         setTokenF(Object.keys(props.tokens)[1]);
@@ -25,6 +27,7 @@ const FaucetForm = (props) => {
             .mint(valueF + "0".repeat(18))
             .send({ from: account })
             .on("transactionHash", (hash) => {
+                setTrxHash(hash);
                 console.log(hash);
             })
             .on("confirmation", (confirmationNumber, receipt) => {})
@@ -69,6 +72,7 @@ const FaucetForm = (props) => {
                     {tokenF}
                 </span>
             </div>
+            <div>{trxHash === "" ? null : <TransactionInfo trxHash={trxHash} />}</div>
         </div>
     );
 };

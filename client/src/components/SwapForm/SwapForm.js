@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import Dropdown from "../../components/Dropdown/Dropdown";
+import TransactionInfo from "../TransactionInfo/TransactionInfo";
 import { fetchBalance } from "../../actions";
 
 const SwapForm = (props) => {
@@ -11,6 +12,7 @@ const SwapForm = (props) => {
     const [token2, setToken2] = useState("");
     const [value1, setValue1] = useState("");
     const [value2, setValue2] = useState("");
+    const [trxHash, setTrxHash] = useState("");
 
     useEffect(() => {
         setToken1(Object.keys(props.tokens)[1]);
@@ -46,6 +48,7 @@ const SwapForm = (props) => {
             .swapTokens(token1, token2, amount1, amount2)
             .send({ from: account, gas: 5500000 })
             .on("transactionHash", (hash) => {
+                setTrxHash(hash);
                 console.log(hash);
             })
             .on("confirmation", (confirmationNumber, receipt) => {})
@@ -115,6 +118,7 @@ const SwapForm = (props) => {
                     <b>1 X = 1 Y</b>
                 </span>
             </div>
+            <div>{trxHash === "" ? null : <TransactionInfo trxHash={trxHash} />}</div>
         </div>
     );
 };

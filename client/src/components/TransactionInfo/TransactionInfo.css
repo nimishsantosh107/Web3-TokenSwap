@@ -1,0 +1,43 @@
+.trxinfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trxinfo span {
+    height: 35px;
+    width: 100%;
+
+    margin: 20px 0px 20px 2px;
+    padding: 3px 12px;
+
+    color: white;
+    font-family: "Outfit", Roboto;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 18px;
+    text-align: left;
+    line-height: 35px;
+    vertical-align: middle;
+
+    background: rgba(49, 26, 81, 0.272);
+    border-radius: 6px;
+}
+
+.trxinfo__icon {
+    height: 22px;
+
+    margin-left: 6px;
+    padding: 8px;
+    color: white;
+
+    border: 1px solid white;
+    border-radius: 6px;
+
+    transition: 0.3s;
+}
+
+.trxinfo__icon:hover {
+    cursor: pointer;
+    background: rgba(49, 26, 81, 0.385);
+}
